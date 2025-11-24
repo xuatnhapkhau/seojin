@@ -3,55 +3,129 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đăng nhập JSON</title>
+    <title>Quản lý dữ liệu tờ khai Seojin Auto</title>
     <style>
-        body { font-family: Arial; background: #f2f2f2; display: flex; justify-content: center; align-items: center; height: 100vh; }
-        .box { background: #fff; padding: 25px; border-radius: 10px; width: 300px; box-shadow: 0 0 10px rgba(0,0,0,0.2); }
-        input { width: 100%; padding: 10px; margin-top: 8px; border: 1px solid #ccc; border-radius: 5px; }
-        button { width: 100%; padding: 10px; margin-top: 15px; background: #007bff; color: #fff; border: none; border-radius: 5px; cursor: pointer; }
-        button:hover { opacity: 0.85; }
-        #msg { margin-top: 10px; color: red; text-align: center; }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f7f6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            color: #1a4a75;
+            margin-bottom: 40px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ddd;
+        }
+        .card-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+        .card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            width: calc(30% - 20px);
+            min-width: 250px;
+            transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
+            cursor: pointer;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            background-color: #e6f0ff;
+        }
+        .card.category {
+            background-color: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+        }
+        .card.category:hover {
+            background-color: #b8daff; 
+        }
+        .card-icon {
+            font-size: 45px;
+            margin-bottom: 15px;
+            color: #007bff;
+        }
+        .card.category .card-icon {
+            color: #0c5460;
+        }
+        .card-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #333;
+        }
+        @media (max-width: 1000px) {
+            .card {
+                width: calc(45% - 20px);
+            }
+        }
+        @media (max-width: 650px) {
+            .card {
+                width: 100%;
+                padding: 20px;
+            }
+        }
     </style>
 </head>
 <body>
 
-<div class="box">
-    <h2 style="text-align:center;">Đăng nhập</h2>
+    <div class="container">
+        <h1>Quản lý dữ liệu tờ khai Seojin Auto</h1>
 
-    <input type="text" id="user" placeholder="Tên đăng nhập">
-    <input type="password" id="pass" placeholder="Mật khẩu">
-    <button onclick="login()">Đăng nhập</button>
+        <div class="card-grid">
+            <div class="card" onclick="openNhapkhautaicho()">
+                <div class="card-icon">🚚</div>
+                <div class="card-title">Quản lý TK nhập khẩu tại chỗ</div>
+            </div>
 
-    <div id="msg"></div>
-</div>
+            <div class="card" onclick="alert('Chuyển đến Kiểm tra TK nháp')">
+                <div class="card-icon">📝</div>
+                <div class="card-title">Kiểm tra TK nháp</div>
+            </div>
 
-<script>
-async function login() {
-    let u = document.getElementById("user").value.trim();
-    let p = document.getElementById("pass").value.trim();
-    let msg = document.getElementById("msg");
+            <div class="card" onclick="alert('Chuyển đến Kiểm tra TK xuất')">
+                <div class="card-icon">🚢</div>
+                <div class="card-title">Kiểm tra TK xuất</div>
+            </div>
 
-    try {
-        // Đọc JSON trên GitHub Pages
-        let res = await fetch("accounts.json");
-        let data = await res.json();
+            <div class="card" onclick="alert('Chuyển đến Dòng hàng TK')">
+                <div class="card-icon">📈</div>
+                <div class="card-title">Dòng hàng TK</div>
+            </div>
+            
+            <div class="card category" onclick="alert('Chuyển đến Trang quản lý Mã NVL & ĐVT')">
+                <div class="card-icon">🗃️</div>
+                <div class="card-title">Các danh mục hàng</div>
+            </div>
 
-        let found = data.users.find(acc => acc.username === u && acc.password === p);
+            <div class="card" onclick="alert('Chuyển đến Setting')">
+                <div class="card-icon">🛠️</div>
+                <div class="card-title">Setting</div>
+            </div>
+        </div>
+    </div>
 
-        if (found) {
-            msg.style.color = "green";
-            msg.innerHTML = "Đăng nhập thành công!";
-            setTimeout(() => window.location.href = "home.html", 800);
-        } else {
-            msg.style.color = "red";
-            msg.innerHTML = "Sai tài khoản hoặc mật khẩu!";
+    <script>
+        function openNhapkhautaicho() {
+            // Mở bảng Nhapkhautaicho trong cùng tab
+            window.location.href = 'nhapkhautaicho.html'; // đây là file HTML bạn đã viết quản lý Firebase
         }
-    }
-    catch (e) {
-        msg.innerHTML = "Không thể tải dữ liệu accounts.json!";
-    }
-}
-</script>
+    </script>
 
 </body>
 </html>
