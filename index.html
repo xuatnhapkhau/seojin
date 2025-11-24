@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Demo Đăng nhập (GitHub Pages)</title>
+  <style>
+    /* Nhẹ, responsive */
+    :root{--bg:#f6f8fa;--card:#ffffff;--accent:#2b6cb0;--muted:#666;}
+    body{font-family:Inter,system-ui,Segoe UI,Roboto,"Helvetica Neue",Arial;margin:0;background:var(--bg);color:#111;}
+    .wrap{max-width:980px;margin:32px auto;padding:20px;display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+    .card{background:var(--card);padding:18px;border-radius:12px;box-shadow:0 6px 18px rgba(20,20,30,0.06);}
+    h1{font-size:18px;margin:0 0 10px}
+    label{display:block;font-size:13px;margin:10px 0 6px;color:var(--muted)}
+    input{width:100%;padding:10px;border-radius:8px;border:1px solid #e3e6ea;font-size:14px}
+    button{margin-top:12px;padding:10px 12px;border-radius:8px;border:0;background:var(--accent);color:white;cursor:pointer}
+    small{color:var(--muted)}
+    .full{grid-column:1/-1}
+    pre{background:#f3f4f6;padding:10px;border-radius:8px;overflow:auto}
+    .muted{color:var(--muted);font-size:13px}
+    @media(max-width:860px){.wrap{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>Đăng ký (Register)</h1>
+      <label for="r_email">Email</label>
+      <input id="r_email" type="email" placeholder="you@example.com" autocomplete="username">
+      <label for="r_pass">Mật khẩu</label>
+      <input id="r_pass" type="password" placeholder="Mật khẩu">
+      <label><input id="r_terms" type="checkbox"> Tôi đồng ý demo này lưu dữ liệu trên máy</label>
+      <button id="btnRegister">Đăng ký</button>
+      <p class="muted">Tài khoản được lưu trong <code>localStorage</code> trình duyệt. Đây là demo không an toàn.</p>
+    </div>
+
+    <div class="card">
+      <h1>Đăng nhập (Login)</h1>
+      <label for="l_email">Email</label>
+      <input id="l_email" type="email" placeholder="you@example.com" autocomplete="username">
+      <label for="l_pass">Mật khẩu</label>
+      <input id="l_pass" type="password" placeholder="Mật khẩu">
+      <label><input id="l_remember" type="checkbox"> Ghi nhớ đăng nhập (localStorage)</label>
+      <button id="btnLogin">Đăng nhập</button>
+
+      <hr style="margin:18px 0;border:none;border-top:1px solid #eef2f6">
+
+      <h1>Người dùng</h1>
+      <div id="userArea"><small class="muted">Chưa có người dùng đăng nhập</small></div>
+      <button id="btnLogout" style="background:#666">Đăng xuất</button>
+    </div>
+
+    <div class="card full">
+      <h1>Hướng dẫn nhanh</h1>
+      <ol>
+        <li>Tạo repo GitHub (ví dụ <code>OnTap_TiengTrung</code>), đặt file <code>index.html</code> trong branch <code>main</code>.</li>
+        <li>Settings → Pages → chọn branch <code>main</code> → Save → chờ vài phút.</li>
+        <li>Mở site trên <code>https://USERNAME.github.io/REPO_NAME/</code> và thử đăng ký/đăng nhập.</li>
+      </ol>
+      <p class="muted">Bạn có thể mở DevTools → Application → localStorage để xem dữ liệu tài khoản.</p>
+      <h3>Gợi ý tài khoản mẫu</h3>
+      <pre id="sample">Email: demo@demo.com
+Pass: 123456</pre>
+    </div>
+  </div>
+
+<script>
+/*
+ Demo login (client-side)
+ - Lưu users vào localStorage dưới key "demo_users" (mảng)
+ - Mỗi user: { email, salt, passHashHex, createdAt }
+ - Hash = SHA-256(salt + password) -> hex
+ - NOTE: Chỉ dành cho demo / học tập
+*/
+
+const $ = id => document.getElementById(id);
+
+// utils
+function toHex(buffer){
+  const bytes = new Uint8Array(buffer);
+  return Array.from(bytes).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+function randSalt(len = 12){
+  const arr = new Uint8Array(len);
+  crypto.getRandomValues(arr);
+  return toHex(arr);
+}
+async function hashSHA256(str){
+  const enc = new TextEncoder();
+  const data = enc.encode(str);
+  const hash = await crypto.subtle.digest('SHA-256', data);
+  return toHex(hash);
+}
+
+// storage helpers
+function loadUsers(){
+  try {
+    const raw = localStorage.getItem('demo_users');
+    if(!raw) return [];
+    return JSON.parse(raw);
+  } catch(e){ return []; }
+}
+function saveUsers(users){
+  localStorage.setItem('demo_users', JSON.stringify(users));
+}
+
+// register
+$.btnRegister.addEventListener('click', async ()=>{
+  const email = $.r_email.value.trim().toLowerCase();
+  const pass = $.r_pass.value;
+  const agreed = $.r_terms.checked;
+  if(!email || !pass){ alert('Vui lòng nhập email và mật khẩu'); return; }
+  if(!agreed){ alert('Bạn phải đồng ý checkbox để dùng demo'); return; }
+  const users = loadUsers();
+  if(users.find(u=>u.email===email)){ alert('Email đã tồn tại'); return; }
+  const salt = randSalt(10);
+  const hash = await hashSHA256(salt + pass);
+  users.push({ email, salt, passHashHex: hash, createdAt: new Date().toISOString() });
+  saveUsers(users);
+  alert('Đăng ký thành công (demo). Bạn có thể đăng nhập ngay.');
+  $.r_email.value=''; $.r_pass.value=''; $.r_terms.checked=false;
+  renderUserArea();
+});
+
+// login
+$.btnLogin.addEventListener('click', async ()=>{
+  const email = $.l_email.value.trim().toLowerCase();
+  const pass = $.l_pass.value;
+  const remember = $.l_remember.checked;
+  if(!email || !pass){ alert('Nhập email và mật khẩu'); return; }
+  const users = loadUsers();
+  const user = users.find(u=>u.email===email);
+  if(!user){ alert('Không tìm thấy tài khoản'); return; }
+  const tryHash = await hashSHA256(user.salt + pass);
+  if(tryHash !== user.passHashHex){ alert('Mật khẩu không đúng'); return; }
+  // login success
+  const session = { email: user.email, loggedAt: new Date().toISOString() };
+  if(remember) localStorage.setItem('demo_session', JSON.stringify(session));
+  else sessionStorage.setItem('demo_session', JSON.stringify(session));
+  alert('Đăng nhập thành công!');
+  $.l_email.value=''; $.l_pass.value='';
+  renderUserArea();
+});
+
+// logout
+$.btnLogout.addEventListener('click', ()=>{
+  localStorage.removeItem('demo_session');
+  sessionStorage.removeItem('demo_session');
+  renderUserArea();
+});
+
+// session read
+function getSession(){
+  const s = sessionStorage.getItem('demo_session') || localStorage.getItem('demo_session');
+  if(!s) return null;
+  try{ return JSON.parse(s); } catch(e){ return null; }
+}
+
+// render user info
+function renderUserArea(){
+  const ua = $.userArea;
+  const session = getSession();
+  if(!session){
+    ua.innerHTML = '<small class="muted">Chưa có người dùng đăng nhập</small>';
+    return;
+  }
+  const users = loadUsers();
+  const user = users.find(u=>u.email===session.email) || {};
+  ua.innerHTML = `
+    <div><strong>Email:</strong> ${session.email}</div>
+    <div><small>Đăng nhập lúc: ${new Date(session.loggedAt).toLocaleString()}</small></div>
+    <div><small>Đăng ký: ${user.createdAt ? new Date(user.createdAt).toLocaleString() : '—'}</small></div>
+    <div style="margin-top:8px"><button id="btn_view_ls">Xem localStorage (console)</button></div>
+  `;
+  // attach view button
+  document.getElementById('btn_view_ls').addEventListener('click', ()=>{
+    console.log('demo_users:', loadUsers());
+    console.log('demo_session:', getSession());
+    alert('Đã ghi localStorage vào console (mở DevTools → Console)');
+  });
+}
+
+// create a sample user the first time (optional)
+(function ensureSample(){
+  const users = loadUsers();
+  if(users.length===0){
+    // create demo@demo.com / 123456
+    (async ()=>{
+      const salt = randSalt(10);
+      const hash = await hashSHA256(salt + '123456');
+      users.push({ email: 'demo@demo.com', salt, passHashHex: hash, createdAt: new Date().toISOString() });
+      saveUsers(users);
+      document.getElementById('sample').textContent = 'Email: demo@demo.com\nPass: 123456';
+      renderUserArea();
+    })();
+  } else renderUserArea();
+})();
+</script>
+</body>
+</html>
