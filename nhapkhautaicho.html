@@ -1,221 +1,131 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Quản lý TK nhập khẩu tại chỗ</title>
-<style>
-body { font-family: Arial; margin:20px; max-width: 1500px; overflow-x:auto; }
-table { width:100%; border-collapse: collapse; table-layout: auto; }
-th, td { border:1px solid #ccc; padding:6px; text-align:left; font-size:12px; white-space: nowrap; }
-input { width:95%; padding:4px; box-sizing:border-box; font-size:12px; }
-.actions { display:flex; gap:4px; }
-button { padding:4px 8px; margin:4px; }
-#searchInput { margin-bottom:12px; width:300px; padding:4px; }
-.errorCell { border:2px solid red; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý dữ liệu tờ khai Seojin Auto</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f7f6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            color: #1a4a75;
+            margin-bottom: 40px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ddd;
+        }
+        .card-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+        .card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            width: calc(30% - 20px);
+            min-width: 250px;
+            transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
+            cursor: pointer;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            background-color: #e6f0ff;
+        }
+        .card.category {
+            background-color: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+        }
+        .card.category:hover {
+            background-color: #b8daff; 
+        }
+        .card-icon {
+            font-size: 45px;
+            margin-bottom: 15px;
+            color: #007bff;
+        }
+        .card.category .card-icon {
+            color: #0c5460;
+        }
+        .card-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #333;
+        }
+        @media (max-width: 1000px) {
+            .card {
+                width: calc(45% - 20px);
+            }
+        }
+        @media (max-width: 650px) {
+            .card {
+                width: 100%;
+                padding: 20px;
+            }
+        }
+    </style>
 </head>
 <body>
 
-<h2>Quản lý TK nhập khẩu tại chỗ</h2>
+    <div class="container">
+        <h1>Quản lý dữ liệu tờ khai Seojin Auto</h1>
 
-<input type="text" id="searchInput" placeholder="Tìm kiếm..." />
-<button id="btnReload">Tải dữ liệu</button>
-<button id="btnAddNew">Thêm bản ghi mới</button>
-<button id="btnExport">Xuất Excel</button>
-<span id="msg"></span>
+        <div class="card-grid">
+            <div class="card" onclick="openNhapkhautaicho()">
+                <div class="card-icon">🚚</div>
+                <div class="card-title">Quản lý TK nhập khẩu tại chỗ</div>
+            </div>
 
-<div style="overflow-x:auto;">
-<table>
-  <thead>
-    <tr id="thead"></tr>
-  </thead>
-  <tbody id="tbBody"></tbody>
-</table>
-</div>
+            <div class="card" onclick="alert('Chuyển đến Kiểm tra TK nháp')">
+                <div class="card-icon">📝</div>
+                <div class="card-title">Kiểm tra TK nháp</div>
+            </div>
 
-<!-- Thư viện Firebase -->
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-import { getDatabase, ref, get, push, update, remove, child } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
+            <div class="card" onclick="alert('Chuyển đến Kiểm tra TK xuất')">
+                <div class="card-icon">🚢</div>
+                <div class="card-title">Kiểm tra TK xuất</div>
+            </div>
 
-// -------- Firebase config --------
-const firebaseConfig = {
-  apiKey: "AIzaSyA1JFsENH4znr59Wy8CHBvQv9ViahS2FuQ",
-  authDomain: "seojinmanage.firebaseapp.com",
-  databaseURL: "https://seojinmanage-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "seojinmanage",
-  storageBucket: "seojinmanage.firebasestorage.app",
-  messagingSenderId: "900954568602",
-  appId: "1:900954568602:web:2215438a2160dee5d52c23"
-};
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
+            <div class="card" onclick="alert('Chuyển đến Dòng hàng TK')">
+                <div class="card-icon">📈</div>
+                <div class="card-title">Dòng hàng TK</div>
+            </div>
+            
+            <div class="card category" onclick="alert('Chuyển đến Trang quản lý Mã NVL & ĐVT')">
+                <div class="card-icon">🗃️</div>
+                <div class="card-title">Các danh mục hàng</div>
+            </div>
 
-// -------- Cột --------
-const columns = [
-  "STT","MST_XK","Ten_XK","TKX_NO","TKX_LH","TKX_DATE","PXK_NO","PXK_DATE","VAT_NO","VAT_DATE",
-  "TKX_TRIGIA","REMARK","REQUEST_LH_TKN","FOLDER_NAME","ENDDATE_TKN","TKN_NO","TKN_LH","TKN_DATE",
-  "TKN_TRANGTHAI","DOC_RECEIVE","SUBJECT_MAILDOC","PIC_CARE","PIC_OPENCD","DONE_NOT"
-];
+            <div class="card" onclick="alert('Chuyển đến Setting')">
+                <div class="card-icon">🛠️</div>
+                <div class="card-title">Setting</div>
+            </div>
+        </div>
+    </div>
 
-const thead = document.getElementById('thead');
-const tbBody = document.getElementById('tbBody');
-const msg = document.getElementById('msg');
-thead.innerHTML = columns.map(c=>`<th>${c}</th>`).join('') + '<th>Actions</th>';
+    <script>
+        function openNhapkhautaicho() {
+            // Mở bảng Nhapkhautaicho trong cùng tab
+            window.location.href = 'nhapkhautaicho.html'; // đây là file HTML bạn đã viết quản lý Firebase
+        }
+    </script>
 
-// Hiển thị thông báo
-function showMsg(s,isError=false){ msg.textContent=s; msg.style.color=isError?'red':'#333'; setTimeout(()=>msg.textContent='',5000); }
-
-// Validate ô
-function validateCell(column,value,inputElement){
-  const dateCols = ["TKX_DATE","PXK_DATE","VAT_DATE","TKN_DATE","DOC_RECEIVE"];
-  let valid=true, m='';
-  if(dateCols.includes(column) && value){
-    if(!/^\d{2}\/\d{2}\/\d{4}$/.test(value)){
-      valid=false; m='Sai định dạng ngày dd/mm/yyyy';
-    }
-  }
-  if(!valid){
-    inputElement.classList.add('errorCell');
-    inputElement.title = m;
-  }else{
-    inputElement.classList.remove('errorCell');
-    inputElement.title='';
-  }
-  return valid;
-}
-
-// Tính cột tự động
-function computeAutoColumns(rowData){
-  const tkxDateStr = rowData.TKX_DATE;
-  if(tkxDateStr && /^\d{2}\/\d{2}\/\d{4}$/.test(tkxDateStr)){
-    const parts = tkxDateStr.split('/');
-    const dateObj = new Date(parts[2], parts[1]-1, parts[0]);
-    const endDate = new Date(dateObj); endDate.setDate(endDate.getDate()+15);
-    rowData.ENDDATE_TKN = `${('0'+endDate.getDate()).slice(-2)}/${('0'+(endDate.getMonth()+1)).slice(-2)}/${endDate.getFullYear()}`;
-    rowData.FOLDER_NAME = `${('0'+dateObj.getDate()).slice(-2)}.${('0'+(dateObj.getMonth()+1)).slice(-2)}`;
-  }
-}
-
-// STT tự tăng
-async function getNextSTT(){
-  const snap = await get(child(ref(db),'Nhapkhautaicho'));
-  if(!snap.exists()) return 1;
-  const data = snap.val();
-  const sttList = Object.values(data).map(u=>Number(u.STT)||0);
-  return Math.max(...sttList)+1;
-}
-
-// Load dữ liệu
-async function loadData(){
-  tbBody.innerHTML = '<tr><td colspan="'+(columns.length+1)+'">Đang tải...</td></tr>';
-  try{
-    const snapshot = await get(child(ref(db),'Nhapkhautaicho'));
-    if(!snapshot.exists()){ tbBody.innerHTML='<tr><td colspan="'+(columns.length+1)+'">Không có dữ liệu</td></tr>'; return;}
-    renderRows(snapshot.val());
-    showMsg('Tải dữ liệu thành công.');
-  }catch(err){ console.error(err); tbBody.innerHTML='<tr><td colspan="'+(columns.length+1)+'">Lỗi tải dữ liệu</td></tr>'; showMsg(err.message,true);}
-}
-
-// Render rows
-function renderRows(dataObj){
-  tbBody.innerHTML='';
-  Object.keys(dataObj).forEach(id=>{
-    const rowData = dataObj[id];
-    const tr = document.createElement('tr');
-    columns.forEach(c=>{
-      const td = document.createElement('td'); td.textContent = rowData[c]??''; tr.appendChild(td);
-    });
-    const tdAct = document.createElement('td');
-    const div = document.createElement('div'); div.className='actions';
-    const btnEdit = document.createElement('button'); btnEdit.textContent='Edit';
-    btnEdit.addEventListener('click',()=>enterEditMode(tr,id,rowData));
-    const btnDelete = document.createElement('button'); btnDelete.textContent='Delete';
-    btnDelete.addEventListener('click',()=>{
-      if(!confirm('Xác nhận xóa?')) return;
-      remove(ref(db,'Nhapkhautaicho/'+id)).then(()=>loadData()).catch(err=>{showMsg(err.message,true); console.error(err);});
-    });
-    div.appendChild(btnEdit); div.appendChild(btnDelete);
-    tdAct.appendChild(div); tr.appendChild(tdAct);
-    tbBody.appendChild(tr);
-  });
-}
-
-// Edit mode
-function enterEditMode(tr,id,rowData){
-  tr.innerHTML=''; 
-  const inputs={};
-  columns.forEach(c=>{
-    const td=document.createElement('td');
-    const inp=document.createElement('input'); inp.type='text'; inp.value=rowData[c]??'';
-    inp.addEventListener('input',()=>validateCell(c,inp.value,inp));
-    td.appendChild(inp); tr.appendChild(td);
-    inputs[c]=inp;
-  });
-
-  const tdAct=document.createElement('td');
-  const div=document.createElement('div'); div.className='actions';
-  const btnSave=document.createElement('button'); btnSave.textContent='Save';
-  const btnCancel=document.createElement('button'); btnCancel.textContent='Cancel';
-
-  btnSave.addEventListener('click', async ()=>{
-    let allValid=true;
-    columns.forEach(c=>{ if(!validateCell(c,inputs[c].value,inputs[c])) allValid=false; });
-    if(!allValid){ alert('Có ô sai định dạng, vui lòng sửa trước khi lưu!'); return; }
-
-    const newData={}; columns.forEach(c=>newData[c]=inputs[c].value);
-    computeAutoColumns(newData);
-    await update(ref(db,'Nhapkhautaicho/'+id),newData).then(()=>loadData()).catch(err=>{ showMsg(err.message,true); console.error(err); alert(err.message); });
-  });
-  btnCancel.addEventListener('click',loadData);
-  div.appendChild(btnSave); div.appendChild(btnCancel);
-  tdAct.appendChild(div); tr.appendChild(tdAct);
-}
-
-// Thêm mới
-document.getElementById('btnAddNew').addEventListener('click', async ()=>{
-  const newData={};
-  newData.STT = await getNextSTT();
-  columns.forEach(c=>{ if(c!=='STT') newData[c]=''; });
-  computeAutoColumns(newData);
-  await push(ref(db,'Nhapkhautaicho'),newData).then(()=>loadData()).catch(err=>{showMsg(err.message,true); console.error(err);});
-});
-
-// Reload
-document.getElementById('btnReload').addEventListener('click',loadData);
-
-// Tìm kiếm
-const searchInput = document.getElementById('searchInput');
-searchInput.addEventListener('input',()=>{
-  const filter = searchInput.value.toLowerCase();
-  const rows = tbBody.querySelectorAll('tr');
-  rows.forEach(tr=>{
-    const text = Array.from(tr.querySelectorAll('td')).map(td=>td.textContent.toLowerCase()).join(' ');
-    tr.style.display = text.includes(filter)?'':'none';
-  });
-});
-
-// Xuất Excel
-import * as XLSX from "https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.mjs";
-document.getElementById('btnExport').addEventListener('click', ()=>{
-  const rows = tbBody.querySelectorAll('tr');
-  if(rows.length===0){ alert('Không có dữ liệu'); return; }
-  const data=[];
-  rows.forEach(tr=>{
-    const obj={};
-    columns.forEach((c,i)=> obj[c] = tr.cells[i]?.textContent ?? '');
-    data.push(obj);
-  });
-  const wb=XLSX.utils.book_new();
-  const ws=XLSX.utils.json_to_sheet(data);
-  XLSX.utils.book_append_sheet(wb, ws, "Nhapkhautaicho");
-  XLSX.writeFile(wb, "Nhapkhautaicho.xlsx");
-});
-
-// Load dữ liệu lần đầu
-loadData();
-
-</script>
 </body>
 </html>
