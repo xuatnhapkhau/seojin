@@ -4,7 +4,7 @@ body {
     padding: 0;
     background-color: #f4f5f9; /* Màu nền tổng thể hơi xám nhạt */
     color: #333;
-    padding-top: 80px; /* Thêm padding cho nội dung không bị thanh navbar che mất */
+    padding-top: 80px; /* Padding cho body để nội dung không bị navbar che */
 }
 
 /* --- Thanh điều hướng (Navbar) - Fixed và Trong suốt --- */
@@ -12,21 +12,19 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 100px; /* Giữ padding đã điều chỉnh */
+    padding: 10px 100px; 
 
-    /* Thay đổi chính: */
-    background-color: transparent; /* Nền trong suốt */
-    border-bottom: none; /* Loại bỏ đường viền dưới */
-    
-    /* Các thuộc tính Cố định (Fixed) giữ nguyên */
+    /* Thuộc tính Cố định (Fixed) */
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     z-index: 1000;
+    
+    /* Thuộc tính nền trong suốt/không viền */
+    background-color: transparent; 
+    border-bottom: none; 
 }
-/* --- Logo (Hình ảnh) --- */
-/* Xóa code cho .logo cũ (text T&T) */
 
 /* --- Logo Container: Nền hòa lẫn màu trang, không viền, bo tròn --- */
 .logo-container {
@@ -34,21 +32,61 @@ body {
     align-items: center; 
     gap: 10px; 
     
-    /* Thuộc tính mới: */
-    background-color: #f4f5f9; /* Màu nền trang (body background color) */
-    border: none; /* Loại bỏ đường viền */
+    background-color: #f4f5f9; 
+    border: none; 
     
     padding: 5px 20px; 
-    border-radius: 50px; /* Giữ hình dạng viên thuốc */
-}
-/* --- Menu Nav --- */
-nav ul {
-    list-style: none;
-    display: flex;
-    margin: 0;
-    padding: 0;
+    border-radius: 50px; 
 }
 
+.header-logo {
+    height: 60px; 
+    width: auto;
+}
+
+.slogan {
+    font-size: 18px; 
+    font-weight: 700; 
+    color: #007bff; 
+}
+
+/* --- Ô Tìm kiếm (Search Box) --- */
+.search-container {
+    flex-grow: 1; 
+    display: flex;
+    justify-content: center; 
+    margin: 0 50px; 
+}
+
+.search-form {
+    display: flex;
+    align-items: center;
+    background-color: white; 
+    border-radius: 50px; 
+    padding: 8px 15px;
+    width: 100%;
+    max-width: 450px; 
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.08); 
+}
+
+.search-icon {
+    font-size: 20px;
+    color: #888;
+    margin-right: 10px;
+}
+
+.search-input {
+    border: none;
+    outline: none; 
+    font-size: 16px;
+    width: 100%;
+    background: transparent; 
+    color: #333;
+}
+
+.search-input::placeholder {
+    color: #999;
+}
 
 /* --- Nút Đăng ký/Đăng nhập --- */
 .auth-buttons button {
@@ -57,7 +95,7 @@ nav ul {
     margin-left: 10px;
     cursor: pointer;
     border-radius: 6px;
-    font-weight: 600; /* Đã sửa: Đậm hơn */
+    font-weight: 600; 
     transition: background-color 0.3s;
 }
 
@@ -68,7 +106,7 @@ nav ul {
 }
 
 .auth-buttons .login {
-    background-color: #007bff; /* Màu xanh nổi bật */
+    background-color: #007bff; 
     color: white;
 }
 
@@ -82,11 +120,11 @@ nav ul {
 }
 
 .main-content {
-    flex: 2; /* Chiếm phần lớn không gian */
+    flex: 2; 
 }
 
 .sidebar {
-    flex: 1; /* Chiếm phần còn lại */
+    flex: 1; 
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -98,8 +136,8 @@ nav ul {
 }
 
 .tag {
-    background-color: #e0f7fa; /* Màu nền tag */
-    color: #00bcd4; /* Màu chữ tag */
+    background-color: #e0f7fa; 
+    color: #00bcd4; 
     padding: 5px 10px;
     margin-right: 8px;
     border-radius: 4px;
@@ -112,12 +150,12 @@ h1 {
     font-weight: 900;
     line-height: 1.2;
     margin: 10px 0;
-    color: #212529; /* Màu chữ tiêu đề */
+    color: #212529; 
 }
 
 .highlight {
-    color: #007bff; /* Màu xanh nổi bật cho "Xuất Nhập Khẩu" */
-    font-size: 64px; /* Chữ to hơn cho phần highlight */
+    color: #007bff; 
+    font-size: 64px; 
 }
 
 .subtitle {
@@ -269,110 +307,43 @@ h1 {
     font-size: 20px;
 }
 
-/* --- Điều chỉnh giao diện nhỏ hơn (Media Queries) --- */
-@media (max-width: 992px) {
-    .navbar {
-        padding: 15px 20px;
-    }
-    .container {
-        flex-direction: column;
-        margin-top: 20px;
-        padding: 0 20px;
-    }
-    .highlight {
-        font-size: 50px;
-    }
-}
-/* --- Logo (Hình ảnh) và Khẩu hiệu (Slogan) --- */
-
-.logo-container {
-    display: flex; 
-    align-items: center; /* Căn giữa dọc cho logo và slogan */
-    gap: 10px; /* Thêm khoảng cách giữa logo và slogan */
-}
-
-.header-logo {
-    height: 60px; /* Giữ nguyên kích thước 60px theo yêu cầu trước */
-    width: auto;
-}
-
-.slogan {
-    font-size: 18px; /* Kích thước chữ cho slogan */
-    font-weight: 700; /* Làm chữ đậm */
-    color: #007bff; /* Màu chữ đen */
-    /* Bạn có thể tùy chỉnh màu sắc nếu muốn nó nổi bật hơn, ví dụ: color: #007bff; */
-}
-/* --- Ô Tìm kiếm (Search Box) --- */
-.search-container {
-    flex-grow: 1; /* Cho phép nó giãn nở để chiếm không gian giữa */
-    display: flex;
-    justify-content: center; /* Căn giữa form tìm kiếm */
-    margin: 0 50px; /* Thêm khoảng cách hai bên so với logo và nút đăng nhập */
-}
-
-.search-form {
-    display: flex;
-    align-items: center;
-    background-color: white; /* Nền trắng */
-    border-radius: 50px; /* Bo tròn hai đầu */
-    padding: 8px 15px;
-    width: 100%;
-    max-width: 450px; /* Giới hạn chiều rộng để không quá to */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.08); /* Bóng đổ nhẹ, mờ */
-}
-
-.search-icon {
-    font-size: 20px;
-    color: #888;
-    margin-right: 10px;
-}
-
-.search-input {
-    border: none;
-    outline: none; /* Xóa đường viền khi focus */
-    font-size: 16px;
-    width: 100%;
-    background: transparent; /* Nền trong suốt để hòa với search-form */
-    color: #333;
-}
-
-.search-input::placeholder {
-    color: #999;
-}
 /* --- Modal (Popup) Styles --- */
 
 /* Lớp phủ (Overlay) */
 .modal {
-    display: none; /* Mặc định ẩn modal */
-    position: fixed; /* Cố định vị trí */
-    z-index: 2000; /* Đảm bảo nó nằm trên tất cả các thành phần khác (kể cả navbar) */
+    display: none; /* Sửa lỗi: Mặc định ẩn modal */
+    position: fixed; 
+    z-index: 2000; 
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    overflow: auto; /* Cho phép cuộn nếu nội dung quá dài */
-    background-color: rgba(0,0,0,0.6); /* Màu nền đen mờ */
-    backdrop-filter: blur(3px); /* Hiệu ứng làm mờ nền (tùy chọn) */
+    overflow: auto; 
+    background-color: rgba(0,0,0,0.6); 
+    backdrop-filter: blur(3px); 
+
+    /* Căn giữa Tuyệt đối */
+    justify-content: center; 
+    align-items: center; 
 }
 
 /* Hộp nội dung chính của Modal */
 .modal-content {
     background-color: #fff;
-    margin: 10% auto; /* Đặt ở giữa theo chiều dọc và căn giữa theo chiều ngang */
-    padding: 30px;
-    border-radius: 12px;
+    padding: 40px; 
+    border-radius: 20px; /* Bo góc lớn hơn */
     width: 90%; 
-    max-width: 400px; /* Giới hạn chiều rộng */
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    max-width: 400px; 
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15); 
     position: relative;
     animation-name: animatetop;
-    animation-duration: 0.4s
+    animation-duration: 0.4s;
+    top: 0; 
 }
 
-/* Hiệu ứng trượt xuống */
 @keyframes animatetop {
-    from {top: -300px; opacity: 0}
-    to {top: 0; opacity: 1}
+    from {opacity: 0}
+    to {opacity: 1}
 }
 
 /* Nút đóng */
@@ -386,6 +357,7 @@ h1 {
     position: absolute;
     right: 15px;
     top: 10px;
+    z-index: 20; /* Đảm bảo nút đóng nằm trên cùng */
 }
 
 .close-button:hover,
@@ -418,14 +390,36 @@ h1 {
     font-size: 14px;
 }
 
-.input-group input[type="text"],
-.input-group input[type="password"] {
-    width: 100%;
-    padding: 10px;
+/* --- Input với Icon --- */
+.input-icon-wrapper {
+    display: flex;
+    align-items: center;
     border: 1px solid #ddd;
-    border-radius: 6px;
-    box-sizing: border-box; /* Quan trọng để padding không làm tăng width */
+    border-radius: 10px; 
+    padding: 0 10px;
+    transition: border-color 0.3s;
+}
+
+.input-icon-wrapper:focus-within {
+    border-color: #007bff; 
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+}
+
+.input-icon {
+    font-size: 18px;
+    color: #007bff; 
+    margin-right: 10px;
+}
+
+.input-icon-wrapper input[type="text"],
+.input-icon-wrapper input[type="password"] {
+    width: 100%;
+    padding: 10px 0; 
+    border: none; 
+    border-radius: 0; 
+    box-sizing: border-box; 
     font-size: 16px;
+    background: transparent;
 }
 
 .forgot-password {
@@ -442,11 +436,34 @@ h1 {
 .login-submit {
     width: 100%;
     margin-top: 10px;
-    padding: 12px !important; /* Dùng !important để ghi đè btn-primary cũ */
+    padding: 12px !important; 
+}
+
+.login-submit:hover {
+    background-color: #0056b3; 
+    box-shadow: 0 4px 10px rgba(0, 123, 255, 0.4);
 }
 
 .register-link {
     text-align: center;
     margin-top: 20px;
     font-size: 14px;
+}
+
+/* --- Điều chỉnh giao diện nhỏ hơn (Media Queries) --- */
+@media (max-width: 992px) {
+    .navbar {
+        padding: 15px 20px;
+    }
+    .search-container {
+        margin: 0 15px;
+    }
+    .container {
+        flex-direction: column;
+        margin-top: 20px;
+        padding: 0 20px;
+    }
+    .highlight {
+        font-size: 50px;
+    }
 }
