@@ -3,129 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản lý dữ liệu tờ khai Seojin Auto</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f4f7f6;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        h1 {
-            text-align: center;
-            color: #1a4a75;
-            margin-bottom: 40px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #ddd;
-        }
-        .card-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            justify-content: center;
-        }
-        .card {
-            background-color: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            padding: 30px;
-            width: calc(30% - 20px);
-            min-width: 250px;
-            transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
-            cursor: pointer;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-            background-color: #e6f0ff;
-        }
-        .card.category {
-            background-color: #d1ecf1;
-            border: 1px solid #bee5eb;
-            color: #0c5460;
-        }
-        .card.category:hover {
-            background-color: #b8daff; 
-        }
-        .card-icon {
-            font-size: 45px;
-            margin-bottom: 15px;
-            color: #007bff;
-        }
-        .card.category .card-icon {
-            color: #0c5460;
-        }
-        .card-title {
-            font-size: 1.3em;
-            font-weight: 600;
-            color: #333;
-        }
-        @media (max-width: 1000px) {
-            .card {
-                width: calc(45% - 20px);
-            }
-        }
-        @media (max-width: 650px) {
-            .card {
-                width: 100%;
-                padding: 20px;
-            }
-        }
-    </style>
+    <title>Thư viện ngành Xuất Nhập Khẩu - Mô phỏng</title>
+    <link rel="stylesheet" href="styles.css"> <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap" rel="stylesheet">
 </head>
 <body>
-
-    <div class="container">
-        <h1>Quản lý dữ liệu tờ khai Seojin Auto</h1>
-
-        <div class="card-grid">
-            <div class="card" onclick="openNhapkhautaicho()">
-                <div class="card-icon">🚚</div>
-                <div class="card-title">Quản lý TK nhập khẩu tại chỗ</div>
-            </div>
-
-            <div class="card" onclick="alert('Chuyển đến Kiểm tra TK nháp')">
-                <div class="card-icon">📝</div>
-                <div class="card-title">Kiểm tra TK nháp</div>
-            </div>
-
-            <div class="card" onclick="alert('Chuyển đến Kiểm tra TK xuất')">
-                <div class="card-icon">🚢</div>
-                <div class="card-title">Kiểm tra TK xuất</div>
-            </div>
-
-            <div class="card" onclick="alert('Chuyển đến Dòng hàng TK')">
-                <div class="card-icon">📈</div>
-                <div class="card-title">Dòng hàng TK</div>
-            </div>
-            
-            <div class="card category" onclick="alert('Chuyển đến Trang quản lý Mã NVL & ĐVT')">
-                <div class="card-icon">🗃️</div>
-                <div class="card-title">Các danh mục hàng</div>
-            </div>
-
-            <div class="card" onclick="alert('Chuyển đến Setting')">
-                <div class="card-icon">🛠️</div>
-                <div class="card-title">Setting</div>
-            </div>
+    <header class="navbar">
+        <div class="logo-container"> 
+            <img src="logo.png" alt="Logo của bạn" class="header-logo">
+            <span class="slogan">Làm việc thông minh hơn</span>
         </div>
-    </div>
+        
+        <div class="search-container">
+            <form class="search-form">
+                <span class="search-icon">🔍</span>
+                <input type="text" placeholder="Tìm kiếm" class="search-input">
+            </form>
+        </div>
+        <div class="auth-buttons">
+            <button class="register">Đăng ký</button>
+            <button class="login">Đăng nhập</button>
+        </div>
+    </header>
 
-    <script>
-        function openNhapkhautaicho() {
-            // Mở bảng Nhapkhautaicho trong cùng tab
-            window.location.href = 'nhapkhautaicho.html'; // đây là file HTML bạn đã viết quản lý Firebase
-        }
-    </script>
+    <main class="container">
+        <section class="main-content">
+            <div class="tags">
+                <span class="tag">#Logistics</span>
+                <span class="tag">#Trade</span>
+                <span class="tag">#Customs</span>
+            </div>
+            <h1>Thư viện ngành <span class="highlight">Xuất Nhập Khẩu</span></h1>
+            <p class="subtitle">Tài nguyên pháp lý, hỏi-đáp nghiệp vụ, luyện thi chứng chỉ</p>
 
+            <div class="action-buttons">
+                <button class="btn-primary">Luyện thi ngay</button>
+                <button class="btn-secondary">Đặt Câu Hỏi</button>
+            </div>
+
+            <div class="updates">
+                <a href="#">Cập Nhật Liên Tục</a>
+                <a href="#">Trao đổi nhiệt tình</a>
+            </div>
+
+            <h2 class="section-title">Văn bản mới cập nhật</h2>
+            <div class="latest-document">
+                <p>Công văn 35821/CHO-GSQL năm 2025 V.v Áp dụng phương thức kiểm tra giám đối với thực phẩm nhập khẩu</p>
+            </div>
+        </section>
+
+        <aside class="sidebar">
+            <div class="info-card card-document">
+                <div class="card-left">
+                    <span class="icon">📄</span>
+                    <div class="text-content">
+                        <p class="title">Quản lý dữ liệu tờ khai</p>
+                        <p class="description">Nhiều doanh nghiệp hàng đầu
+                    </div>
+                </div>
+                <div class="number">1.383</div>
+            </div>
+
+            <div class="info-card card-community">
+                <div class="card-left">
+                    <span class="icon">👥</span>
+                    <div class="text-content">
+                        <p class="title">Ứng dụng tự động hóa
+                        <p class="description">Làm việc chính xác, hiệu quả
+                    </div>
+                </div>
+                <div class="number">2.996</div>
+            </div>
+
+            <div class="info-card card-solution">
+                <div class="card-left">
+                    <span class="icon">❓</span>
+                    <div class="text-content">
+                        <p class="title">Viết ứng dụng
+                        <p class="description">Cá nhân hóa cho từng doanh nghiệp
+                    </div>
+                </div>
+                <div class="number">515</div>
+            </div>
+        </aside>
+    </main>
+    <button class="scroll-top">^</button>
 </body>
 </html>
