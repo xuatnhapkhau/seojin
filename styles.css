@@ -339,3 +339,114 @@ h1 {
 .search-input::placeholder {
     color: #999;
 }
+/* --- Modal (Popup) Styles --- */
+
+/* Lớp phủ (Overlay) */
+.modal {
+    display: none; /* Mặc định ẩn modal */
+    position: fixed; /* Cố định vị trí */
+    z-index: 2000; /* Đảm bảo nó nằm trên tất cả các thành phần khác (kể cả navbar) */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; /* Cho phép cuộn nếu nội dung quá dài */
+    background-color: rgba(0,0,0,0.6); /* Màu nền đen mờ */
+    backdrop-filter: blur(3px); /* Hiệu ứng làm mờ nền (tùy chọn) */
+}
+
+/* Hộp nội dung chính của Modal */
+.modal-content {
+    background-color: #fff;
+    margin: 10% auto; /* Đặt ở giữa theo chiều dọc và căn giữa theo chiều ngang */
+    padding: 30px;
+    border-radius: 12px;
+    width: 90%; 
+    max-width: 400px; /* Giới hạn chiều rộng */
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    position: relative;
+    animation-name: animatetop;
+    animation-duration: 0.4s
+}
+
+/* Hiệu ứng trượt xuống */
+@keyframes animatetop {
+    from {top: -300px; opacity: 0}
+    to {top: 0; opacity: 1}
+}
+
+/* Nút đóng */
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    line-height: 1;
+    position: absolute;
+    right: 15px;
+    top: 10px;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: #000;
+    text-decoration: none;
+}
+
+/* Tiêu đề & Input */
+.modal-content h2 {
+    font-weight: 900;
+    color: #007bff;
+    margin-bottom: 5px;
+}
+
+.modal-content p {
+    color: #666;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+.input-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+.input-group input[type="text"],
+.input-group input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-sizing: border-box; /* Quan trọng để padding không làm tăng width */
+    font-size: 16px;
+}
+
+.forgot-password {
+    text-align: right;
+    margin-bottom: 20px;
+}
+
+.forgot-password a {
+    color: #007bff;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.login-submit {
+    width: 100%;
+    margin-top: 10px;
+    padding: 12px !important; /* Dùng !important để ghi đè btn-primary cũ */
+}
+
+.register-link {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+}
