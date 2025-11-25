@@ -1,0 +1,341 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f5f9; /* Màu nền tổng thể hơi xám nhạt */
+    color: #333;
+    padding-top: 80px; /* Thêm padding cho nội dung không bị thanh navbar che mất */
+}
+
+/* --- Thanh điều hướng (Navbar) - Fixed và Trong suốt --- */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 100px; /* Giữ padding đã điều chỉnh */
+
+    /* Thay đổi chính: */
+    background-color: transparent; /* Nền trong suốt */
+    border-bottom: none; /* Loại bỏ đường viền dưới */
+    
+    /* Các thuộc tính Cố định (Fixed) giữ nguyên */
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+/* --- Logo (Hình ảnh) --- */
+/* Xóa code cho .logo cũ (text T&T) */
+
+/* --- Logo Container: Nền hòa lẫn màu trang, không viền, bo tròn --- */
+.logo-container {
+    display: flex; 
+    align-items: center; 
+    gap: 10px; 
+    
+    /* Thuộc tính mới: */
+    background-color: #f4f5f9; /* Màu nền trang (body background color) */
+    border: none; /* Loại bỏ đường viền */
+    
+    padding: 5px 20px; 
+    border-radius: 50px; /* Giữ hình dạng viên thuốc */
+}
+/* --- Menu Nav --- */
+nav ul {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+
+/* --- Nút Đăng ký/Đăng nhập --- */
+.auth-buttons button {
+    border: none;
+    padding: 8px 18px;
+    margin-left: 10px;
+    cursor: pointer;
+    border-radius: 6px;
+    font-weight: 600; /* Đã sửa: Đậm hơn */
+    transition: background-color 0.3s;
+}
+
+.auth-buttons .register {
+    background-color: transparent;
+    border: 1px solid #ccc;
+    color: #555;
+}
+
+.auth-buttons .login {
+    background-color: #007bff; /* Màu xanh nổi bật */
+    color: white;
+}
+
+/* --- Khu vực Nội dung Chính (Main Container) --- */
+.container {
+    display: flex;
+    max-width: 1200px;
+    margin: 50px auto;
+    padding: 0 20px;
+    gap: 40px;
+}
+
+.main-content {
+    flex: 2; /* Chiếm phần lớn không gian */
+}
+
+.sidebar {
+    flex: 1; /* Chiếm phần còn lại */
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* --- Tiêu đề & Tags --- */
+.tags {
+    margin-bottom: 10px;
+}
+
+.tag {
+    background-color: #e0f7fa; /* Màu nền tag */
+    color: #00bcd4; /* Màu chữ tag */
+    padding: 5px 10px;
+    margin-right: 8px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+h1 {
+    font-size: 48px;
+    font-weight: 900;
+    line-height: 1.2;
+    margin: 10px 0;
+    color: #212529; /* Màu chữ tiêu đề */
+}
+
+.highlight {
+    color: #007bff; /* Màu xanh nổi bật cho "Xuất Nhập Khẩu" */
+    font-size: 64px; /* Chữ to hơn cho phần highlight */
+}
+
+.subtitle {
+    color: #6c757d;
+    font-size: 18px;
+    margin-bottom: 25px;
+}
+
+/* --- Nút bấm --- */
+.action-buttons {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.action-buttons button {
+    padding: 12px 30px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: white;
+    border: none;
+}
+
+.btn-secondary {
+    background-color: white;
+    color: #007bff;
+    border: 1px solid #007bff;
+}
+
+/* --- Cập nhật & Trao đổi --- */
+.updates a {
+    text-decoration: none;
+    color: #007bff;
+    margin-right: 20px;
+    font-size: 15px;
+    position: relative;
+}
+
+.updates a:first-child::after {
+    content: '';
+    position: absolute;
+    right: -10px;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 15px;
+    width: 1px;
+    background-color: #ccc;
+}
+
+/* --- Văn bản mới cập nhật --- */
+.section-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-top: 40px;
+    margin-bottom: 15px;
+    border-bottom: 3px solid #007bff;
+    display: inline-block;
+    padding-bottom: 5px;
+    color: #333;
+}
+
+.latest-document {
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    font-size: 16px;
+}
+
+/* --- Sidebar Cards --- */
+.info-card {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.info-card:hover {
+    transform: translateY(-2px);
+}
+
+.card-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.icon {
+    font-size: 30px;
+    color: white;
+    background-color: #ff9800;
+    padding: 10px;
+    border-radius: 8px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+}
+
+.card-document .icon { background-color: #e57373; }
+.card-community .icon { background-color: #81c784; }
+.card-solution .icon { background-color: #4fc3f7; }
+
+
+.text-content .title {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0;
+    color: #333;
+}
+
+.text-content .description {
+    font-size: 14px;
+    color: #6c757d;
+    margin: 5px 0 0 0;
+}
+
+.number {
+    font-size: 30px;
+    font-weight: 900;
+    color: #333;
+}
+
+.scroll-top {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    font-size: 20px;
+}
+
+/* --- Điều chỉnh giao diện nhỏ hơn (Media Queries) --- */
+@media (max-width: 992px) {
+    .navbar {
+        padding: 15px 20px;
+    }
+    .container {
+        flex-direction: column;
+        margin-top: 20px;
+        padding: 0 20px;
+    }
+    .highlight {
+        font-size: 50px;
+    }
+}
+/* --- Logo (Hình ảnh) và Khẩu hiệu (Slogan) --- */
+
+.logo-container {
+    display: flex; 
+    align-items: center; /* Căn giữa dọc cho logo và slogan */
+    gap: 10px; /* Thêm khoảng cách giữa logo và slogan */
+}
+
+.header-logo {
+    height: 60px; /* Giữ nguyên kích thước 60px theo yêu cầu trước */
+    width: auto;
+}
+
+.slogan {
+    font-size: 18px; /* Kích thước chữ cho slogan */
+    font-weight: 700; /* Làm chữ đậm */
+    color: #007bff; /* Màu chữ đen */
+    /* Bạn có thể tùy chỉnh màu sắc nếu muốn nó nổi bật hơn, ví dụ: color: #007bff; */
+}
+/* --- Ô Tìm kiếm (Search Box) --- */
+.search-container {
+    flex-grow: 1; /* Cho phép nó giãn nở để chiếm không gian giữa */
+    display: flex;
+    justify-content: center; /* Căn giữa form tìm kiếm */
+    margin: 0 50px; /* Thêm khoảng cách hai bên so với logo và nút đăng nhập */
+}
+
+.search-form {
+    display: flex;
+    align-items: center;
+    background-color: white; /* Nền trắng */
+    border-radius: 50px; /* Bo tròn hai đầu */
+    padding: 8px 15px;
+    width: 100%;
+    max-width: 450px; /* Giới hạn chiều rộng để không quá to */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.08); /* Bóng đổ nhẹ, mờ */
+}
+
+.search-icon {
+    font-size: 20px;
+    color: #888;
+    margin-right: 10px;
+}
+
+.search-input {
+    border: none;
+    outline: none; /* Xóa đường viền khi focus */
+    font-size: 16px;
+    width: 100%;
+    background: transparent; /* Nền trong suốt để hòa với search-form */
+    color: #333;
+}
+
+.search-input::placeholder {
+    color: #999;
+}
