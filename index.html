@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thư viện ngành Xuất Nhập Khẩu - Mô phỏng</title>
-    <link rel="stylesheet" href="styles.css"> <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css"> 
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap" rel="stylesheet">
 </head>
 <body>
     <header class="navbar">
@@ -19,6 +20,7 @@
                 <input type="text" placeholder="Tìm kiếm" class="search-input">
             </form>
         </div>
+        
         <div class="auth-buttons">
             <button class="register">Đăng ký</button>
             <button class="login" onclick="openLoginModal()">Đăng nhập</button>
@@ -56,8 +58,8 @@
                 <div class="card-left">
                     <span class="icon">📄</span>
                     <div class="text-content">
-                        <p class="title">Quản lý dữ liệu tờ khai</p>
-                        <p class="description">Nhiều doanh nghiệp hàng đầu
+                        <p class="title">Văn bản pháp lý</p>
+                        <p class="description">Chuyên ngành xuất nhập khẩu</p>
                     </div>
                 </div>
                 <div class="number">1.383</div>
@@ -67,8 +69,8 @@
                 <div class="card-left">
                     <span class="icon">👥</span>
                     <div class="text-content">
-                        <p class="title">Ứng dụng tự động hóa
-                        <p class="description">Làm việc chính xác, hiệu quả
+                        <p class="title">Cộng đồng XNK</p>
+                        <p class="description">Kết nối & học hỏi từ AE XNK.</p>
                     </div>
                 </div>
                 <div class="number">2.996</div>
@@ -78,8 +80,8 @@
                 <div class="card-left">
                     <span class="icon">❓</span>
                     <div class="text-content">
-                        <p class="title">Viết ứng dụng
-                        <p class="description">Cá nhân hóa cho từng doanh nghiệp
+                        <p class="title">Giải đáp nghiệp vụ</p>
+                        <p class="description">Hỏi nhanh - đáp gọn.</p>
                     </div>
                 </div>
                 <div class="number">515</div>
@@ -87,58 +89,65 @@
         </aside>
     </main>
     <button class="scroll-top">^</button>
-	<div id="loginModal" class="modal">
 
-    <div class="modal-content">
-        <span class="close-button" onclick="closeLoginModal()">&times;</span>
-        
-        <h2>Đăng nhập hệ thống</h2>
-        <p>Chào mừng trở lại! Vui lòng nhập thông tin của bạn.</p>
+    <div id="loginModal" class="modal">
 
-        <form>
-            <div class="input-group">
-                <label for="username">Tên đăng nhập</label>
-                <input type="text" id="username" name="username" placeholder="Nhập email hoặc tên người dùng" required>
-            </div>
+        <div class="modal-content">
+            <span class="close-button" onclick="closeLoginModal()">&times;</span>
             
-            <div class="input-group">
-                <label for="password">Mật khẩu</label>
-                <input type="password" id="password" name="password" placeholder="Nhập mật khẩu" required>
-            </div>
-            
-            <div class="forgot-password">
-                <a href="#">Quên mật khẩu?</a>
-            </div>
+            <h2>Đăng nhập hệ thống</h2>
+            <p>Chào mừng trở lại! Vui lòng nhập thông tin của bạn.</p>
 
-            <button type="submit" class="btn-primary login-submit">Đăng nhập</button>
-        </form>
+            <form>
+                <div class="input-group">
+                    <label for="username">Tên đăng nhập</label>
+                    <div class="input-icon-wrapper">
+                        <span class="input-icon">👤</span>
+                        <input type="text" id="username" name="username" placeholder="Nhập email hoặc tên người dùng" required>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label for="password">Mật khẩu</label>
+                    <div class="input-icon-wrapper">
+                        <span class="input-icon">🔒</span>
+                        <input type="password" id="password" name="password" placeholder="Nhập mật khẩu" required>
+                    </div>
+                </div>
+                
+                <div class="forgot-password">
+                    <a href="#">Quên mật khẩu?</a>
+                </div>
 
-        <p class="register-link">
-            Chưa có tài khoản? <a href="#">Đăng ký ngay</a>
-        </p>
+                <button type="submit" class="btn-primary login-submit">Đăng nhập</button>
+            </form>
+
+            <p class="register-link">
+                Chưa có tài khoản? <a href="#">Đăng ký ngay</a>
+            </p>
+        </div>
+
     </div>
+    <script>
+        // Lấy Modal
+        var modal = document.getElementById("loginModal");
 
-</div>
-<script>
-    // Lấy Modal
-    var modal = document.getElementById("loginModal");
+        // Hàm mở Modal
+        function openLoginModal() {
+          modal.style.display = "flex"; // Dùng "flex" để căn giữa tuyệt đối
+        }
 
-    // Hàm mở Modal
-    function openLoginModal() {
-      modal.style.display = "block";
-    }
+        // Hàm đóng Modal
+        function closeLoginModal() {
+          modal.style.display = "none";
+        }
 
-    // Hàm đóng Modal
-    function closeLoginModal() {
-      modal.style.display = "none";
-    }
-
-    // Đóng Modal khi người dùng nhấp ra ngoài hộp nội dung
-    window.onclick = function(event) {
-      if (event.target == modal) {
-        modal.style.display = "none";
-      }
-    }
-</script>
+        // Đóng Modal khi người dùng nhấp ra ngoài hộp nội dung
+        window.onclick = function(event) {
+          if (event.target == modal) {
+            modal.style.display = "none";
+          }
+        }
+    </script>
 </body>
 </html>
