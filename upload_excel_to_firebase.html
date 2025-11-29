@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Cập nhật bộ đề thi — Incremental IDs</title>
+  <style>
+    /* Reset và thiết lập font cơ bản */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 24px;
+      background-color: #f4f6f9;
+      color: #333;
+    }
+    
+    /* Container chính */
+    .card {
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      max-width: 900px;
+      margin: 0 auto;
+      border: 1px solid #e0e0e0;
+    }
+    
+    h1 {
+      font-size: 24px;
+      margin: 0 0 20px;
+      color: #1e3a8a; /* Màu xanh đậm */
+      border-bottom: 2px solid #e0e0e0;
+      padding-bottom: 10px;
+    }
+
+    h3 {
+      font-size: 18px;
+      margin: 20px 0 10px;
+      color: #1e3a8a;
+    }
+    
+    label {
+      display: block;
+      margin: 15px 0 8px;
+      font-weight: 600;
+      color: #4b5563;
+    }
+    
+    /* Thiết lập cho các input, select, button */
+    input[type="file"], input[type="text"], select {
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      width: 100%;
+      box-sizing: border-box;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input[type="file"]:focus, input[type="text"]:focus, select:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+      outline: none;
+    }
+    
+    button {
+      padding: 10px 16px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background-color 0.2s, opacity 0.2s;
+      margin-right: 8px;
+    }
+
+    /* Các loại nút */
+    #previewBtn {
+      background-color: #10b981; /* Xanh lá */
+      color: white;
+    }
+
+    #previewBtn:hover {
+      background-color: #059669;
+    }
+
+    #uploadBtn {
+      background-color: #3b82f6; /* Xanh dương */
+      color: white;
+    }
+
+    #uploadBtn:hover {
+      background-color: #2563eb;
+    }
+
+    .template-btn {
+      background-color: #f59e0b; /* Vàng cam */
+      color: white;
+    }
+    
+    .template-btn:hover {
+      background-color: #d97706;
+    }
+
+    /* Vùng Controls */
+    .controls {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .radio-group {
+      display: flex;
+      gap: 20px;
+    }
+    
+    .radio-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: normal;
+      cursor: pointer;
+    }
+
+    /* Vùng Preview */
+    #preview {
+      margin-top: 20px;
+      overflow-x: auto;
+      max-height: 400px;
+      border-radius: 8px;
+      border: 1px solid #e0e0e0;
+      background-color: #f9fafb;
+    }
+
+    /* Bảng */
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      min-width: 600px;
+    }
+    
+    th, td {
+      border: 1px solid #e0e0e0;
+      padding: 10px 12px;
+      font-size: 14px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #eef2ff; /* Màu header bảng */
+      font-weight: 700;
+      color: #1e3a8a;
+      position: sticky;
+      top: 0;
+    }
+    
+    /* Các phần tử phụ */
+    .muted {
+      color: #718096;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+    
+    .danger {
+      color: #e53e3e;
+      font-weight: 700;
+    }
+    
+    hr {
+      border: 0;
+      border-top: 1px solid #e0e0e0;
+      margin: 24px 0;
+    }
+
+    ul {
+      list-style-type: disc;
+      padding-left: 20px;
+      margin-top: 5px;
+    }
+
+    li {
+      margin-bottom: 8px;
+    }
+
+    #status {
+      margin-left: 12px;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>📝 Cập nhật bộ đề câu hỏi trắc nghiệm</h1>
+
+    <label for="fileInput">Chọn file Excel (.xlsx, .xls, .csv)</label>
+    <input id="fileInput" type="file" accept=".xlsx,.xls,.csv" />
+
+    <div style="margin-top:15px" class="controls">
+      <a id="downloadTemplate" href="Template_Update_BoDeThi.xlsx" download="Template_Update_BoDeThi.xlsx">
+        <button class="template-btn">Tải file template (.xlsx)</button>
+      </a>
+    </div>
+
+    <div style="margin-top:20px">
+      <label>⚙️ Chọn Chế độ Cập nhật</label>
+      <div class="radio-group">
+        <label class="radio-label"><input id="treatmentReplace" name="mode" type="radio" value="replace" checked /> Thay thế dữ liệu cũ</label>
+        <label class="radio-label"><input id="treatmentAppend" name="mode" type="radio" value="append" /> Cập nhật thêm câu hỏi</label>
+      </div>
+    </div>
+
+    <div style="margin-top:20px" class="controls">
+      <button id="previewBtn">👁️ Xem trước dữ liệu</button>
+      <button id="uploadBtn">🚀 Upload lên Firestore</button>
+      <span id="status" class="muted">Chờ chọn file và bấm Xem trước.</span>
+    </div>
+
+    <div id="preview">
+      <p class="muted">Nội dung Excel sẽ hiển thị ở đây sau khi bấm "Xem trước dữ liệu".</p>
+    </div>
+
+    <hr/>
+
+    <h3>💡 Quy tắc Xử lý Dữ liệu</h3>
+    <ul>
+	<li>Upload vào Collection *questions* trên Firebase.</li>
+      <li>Dòng 1 của Excel là tên cột sẽ không được upload vào Firestore.</li>
+      <li>Nếu chọn *Thay thế dữ liệu cũ*: Collection *questions* sẽ bị xóa hoàn toàn trước khi upload; ID tài liệu sẽ bắt đầu từ 1.</li>
+      <li>Nếu chọn *Cập nhật thêm câu hỏi*: Chương trình sẽ tìm ID số lớn nhất hiện có và cấp ID tiếp theo từ đó để tránh trùng lặp.</li>
+      <li>Cột A (Mã môn thi) phải là dạng số. Nếu phát hiện giá trị không phải số sẽ cảnh báo và dừng upload.</li>
+    </ul>
+    <p class="muted">Lưu ý: Nếu collection có kích thước lớn, thời gian *Cập nhật thêm câu hỏi* có thể tốn nhiều thời gian để tìm ID lớn nhất.</p>
+  </div>
+
+  <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
+  
+  <script type="module">
+const firebaseConfig = {
+
+  apiKey: "AIzaSyDsAHlo0GxEJJzUJJqeh66AX2L_-_oLyy0",
+
+  authDomain: "thinghiepvuhq.firebaseapp.com",
+
+  projectId: "thinghiepvuhq",
+
+  storageBucket: "thinghiepvuhq.firebasestorage.app",
+
+  messagingSenderId: "523444944172",
+
+  appId: "1:523444944172:web:13c618967461eeb75ac089",
+
+  measurementId: "G-FXJ4MXCBGX"
+
+};
+
+
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js';
+    import { getFirestore, collection, doc, writeBatch, getDocs } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js';
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const fileInput = document.getElementById('fileInput');
+    const previewBtn = document.getElementById('previewBtn');
+    const uploadBtn = document.getElementById('uploadBtn');
+    const previewEl = document.getElementById('preview');
+    const status = document.getElementById('status');
+    const treatmentReplace = document.getElementById('treatmentReplace');
+    const treatmentAppend = document.getElementById('treatmentAppend');
+    const downloadTemplate = document.getElementById('downloadTemplate'); // Biến mới cho nút tải template
+
+    let lastJson = null;
+
+    // Đảm bảo tên file template là 'Template_Update_BoDeThi.xlsx'
+    downloadTemplate.href = 'Template_Update_BoDeThi.xlsx';
+    downloadTemplate.setAttribute('download', 'Template_Update_BoDeThi.xlsx');
+
+
+    function readExcelFile(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          try {
+            const data = e.target.result;
+            const workbook = XLSX.read(data, {type: 'array'});
+            const firstSheetName = workbook.SheetNames[0];
+            const sheet = workbook.Sheets[firstSheetName];
+            const json = XLSX.utils.sheet_to_json(sheet, {defval: null});
+            const headers = workbook.Sheets[firstSheetName] ? XLSX.utils.sheet_to_json(sheet, {header:1})[0] : [];
+            resolve({json, sheetName: firstSheetName, headers});
+          } catch (err) { reject(err); }
+        };
+        reader.onerror = reject;
+        reader.readAsArrayBuffer(file);
+      });
+    }
+
+    function renderPreview(json, headers, maxRows=50) {
+      if (!json || !Array.isArray(json) || json.length === 0) return previewEl.innerHTML = '<p class="muted" style="padding: 15px;">Không có dữ liệu để hiển thị.</p>';
+      const keys = headers && headers.length ? headers : Object.keys(json[0] || {});
+      const rows = json.slice(0, maxRows);
+      let html = '<table><thead><tr>' + keys.map(k => `<th>${k}</th>`).join('') + '</tr></thead><tbody>';
+      for (const r of rows) {
+        html += '<tr>' + keys.map(k => `<td>${(r[k]===null||r[k]===undefined)?'':escapeHtml(String(r[k]))}</td>`).join('') + '</tr>';
+      }
+      html += '</tbody></table>';
+      if (json.length > maxRows) html += `<p class="muted" style="padding: 10px 15px;">Hiển thị ${maxRows}/${json.length} dòng.</p>`;
+      previewEl.innerHTML = html;
+    }
+
+    function escapeHtml(s){ return s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;'); }
+
+    previewBtn.addEventListener('click', async () => {
+      const f = fileInput.files[0];
+      if (!f) return alert('Vui lòng chọn file Excel trước.');
+      status.textContent = 'Đang đọc file...';
+      try {
+        const {json, sheetName, headers} = await readExcelFile(f);
+        lastJson = {rows: json, headers};
+        renderPreview(json, headers);
+        status.textContent = `✅ Đã đọc ${json.length} dòng (sheet: ${sheetName}). Dòng 1 được coi là header.`;
+      } catch (err) {
+        console.error(err); status.textContent = '❌ Lỗi đọc file: ' + err.message;
+      }
+    });
+
+    async function findMaxNumericDocId(collectionName) {
+      status.textContent = '🔍 Đang tìm ID số lớn nhất trong collection... (có thể mất thời gian)';
+      const colRef = collection(db, collectionName);
+      const snapshot = await getDocs(colRef);
+      let max = 0;
+      snapshot.forEach(d => {
+        const id = d.id;
+        if (/^-?\d+$/.test(id)) {
+          const n = parseInt(id, 10);
+          if (!isNaN(n) && n > max) max = n;
+        }
+      });
+      status.textContent = `✅ ID lớn nhất tìm được: ${max}`;
+      return max;
+    }
+
+    async function clearCollection(collectionName) {
+      status.textContent = '🗑️ Đang xóa dữ liệu cũ...';
+      const colRef = collection(db, collectionName);
+      const snapshot = await getDocs(colRef);
+      if (snapshot.empty) {
+        status.textContent = '✅ Không có tài liệu cũ để xóa.';
+        return;
+      }
+      const docs = snapshot.docs;
+      const { writeBatch } = await import('https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js');
+      let batch = writeBatch(db);
+      let cnt = 0;
+      let total = 0;
+      for (const d of docs) {
+        batch.delete(d.ref);
+        cnt++; total++;
+        if (cnt >= 499) { await batch.commit(); batch = writeBatch(db); cnt = 0; status.textContent = `🗑️ Đã xóa ${total} tài liệu...`; }
+      }
+      if (cnt > 0) await batch.commit();
+      status.textContent = `✅ Xóa hoàn tất: ${total} tài liệu đã bị xóa.`;
+    }
+
+    uploadBtn.addEventListener('click', async () => {
+      if (!lastJson) return alert('Chưa có dữ liệu. Vui lòng bấm "Xem trước dữ liệu" trước khi upload.');
+      
+      if (!confirm(`Bạn có chắc chắn muốn thực hiện ${treatmentReplace.checked ? 'THAY THẾ (XÓA & GHI MỚI)' : 'CẬP NHẬT THÊM'} dữ liệu lên Firestore?`)) return;
+
+      const collectionName = 'questions';	//Tên database trên Firebase
+      const mode = treatmentReplace.checked ? 'replace' : 'append';
+      const rows = lastJson.rows;
+      const headers = lastJson.headers || Object.keys(rows[0] || {});
+      
+      if (rows.length === 0) return alert('File không có dòng dữ liệu nào ngoài header.');
+
+      const firstColName = headers[0];
+
+      // Validate column A numeric
+      const nonNumericRows = [];
+      for (let i=0;i<rows.length;i++){
+        const v = rows[i][firstColName];
+        // Chỉ chấp nhận số hoặc null/undefined. Nếu có giá trị, phải là số.
+        if (v !== null && v !== undefined && String(v).trim() !== ''){ 
+          const num = Number(String(v).replace(/,/g,'').trim());
+          if (Number.isNaN(num)) nonNumericRows.push({row:i+2,value:v});
+        }
+      }
+      if (nonNumericRows.length>0){
+        const sample = nonNumericRows.slice(0,5).map(x=>`Dòng ${x.row}: "${x.value}"`).join('\n');
+        return alert('❌ Phát hiện giá trị KHÔNG PHẢI SỐ trong cột A (Mã Môn/Trường đầu tiên):\n'+sample+'\nVui lòng sửa file Excel.');
+      }
+
+      try {
+        let startId = 1;
+        if (mode === 'append') {
+          const max = await findMaxNumericDocId(collectionName);
+          startId = max + 1;
+        }
+        if (mode === 'replace') {
+          await clearCollection(collectionName);
+          startId = 1;
+        }
+
+        status.textContent = '⏳ Bắt đầu upload dữ liệu...';
+        const { writeBatch } = await import('https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js');
+        let batch = writeBatch(db);
+        const BATCH_LIMIT = 499; // Giới hạn batch là 500, dùng 499 để an toàn
+        let cnt=0; let total=0; let currentId=startId;
+
+        for (let i=0;i<rows.length;i++){
+          const r=rows[i];
+          const docData={};
+          for (let j=0;j<headers.length;j++){
+            const key=headers[j];
+            const val=r[key];
+            
+            // Xử lý cột A (đầu tiên) là số, các cột còn lại là chuỗi (hoặc null)
+            docData[key]= (j===0) ? (val===null||val===undefined||String(val).trim()===''? null : Number(String(val).replace(/,/g,'').trim()))
+                                   : (val===null||val===undefined?null:String(val));
+          }
+          const docRef = doc(collection(db, collectionName), String(currentId));
+          batch.set(docRef, docData);
+          currentId++; cnt++; total++;
+          if (cnt>=BATCH_LIMIT){ await batch.commit(); batch=writeBatch(db); cnt=0; status.textContent=`⏳ Đã upload ${total} bản ghi...`;}
+        }
+        if(cnt>0) await batch.commit();
+        status.textContent=`🎉 Hoàn tất upload: ${total} bản ghi (ID bắt đầu từ ${startId}).`;
+        alert('Upload hoàn tất.');
+      } catch(err){ 
+        console.error(err); 
+        status.textContent='❌ Lỗi trong quá trình upload: '+err.message; 
+        alert('Lỗi: '+err.message);
+      }
+    });
+  </script>
+</body>
+</html>
