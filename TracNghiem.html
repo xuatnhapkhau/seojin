@@ -3,17 +3,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Ôn tập trắc nghiệm</title>
-  
-  <link rel="stylesheet" href="styles.css"> 
-  
+  <title>Ôn luyện trắc nghiệm</title>
   <style>
     /* ------------------------------------- */
-    /* CSS: Giao diện chính */
+    /* CSS: Giao diện hiện đại */
     /* ------------------------------------- */
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      /* Điều chỉnh margin để header toàn màn hình không bị đè vào */
+      /* Đảm bảo body không có margin */
       margin: 0; 
       padding: 0;
       background-color: #f4f6f9;
@@ -26,9 +23,15 @@
       border-radius: 16px;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
       max-width: 900px;
-      /* Điều chỉnh margin-top để tạo khoảng cách với Header */
-      margin: 24px auto 20px auto; 
+      /* Margin-bottom cho khoảng cách giữa các card */
+      margin: 20px auto; 
       border: 1px solid #e0e0e0;
+    }
+
+    /* Đảm bảo CARD ĐẦU TIÊN không bị FIXED HEADER che lấp */
+    .card:first-of-type {
+        /* Đẩy nội dung xuống 90px (cao hơn header cố định 60px + margin) */
+        margin-top: 90px; 
     }
     
     h1 {
@@ -57,8 +60,7 @@
 
     select {
         width: 100%;
-        /* Giữ nguyên: Chiều rộng tối đa để hiển thị tên môn đầy đủ */
-        max-width: 500px; 
+        max-width: 300px;
         display: inline-block;
     }
 
@@ -68,52 +70,84 @@
         align-items: center;
         flex-wrap: wrap;
     }
-    
+
     /* ------------------------------------- */
-    /* CẬP NHẬT CSS CHO HEADER (Tối giản) */
+    /* CẬP NHẬT CSS CHO HEADER (Fixed, Trong suốt, Chỉ Icon) */
     /* ------------------------------------- */
     .navbar {
         display: flex;
-        /* Chỉ căn trái */
         justify-content: flex-start; 
         align-items: center;
         padding: 15px 30px;
-        background-color: #ffffff;
-        border-bottom: 1px solid #e0e0e0;
+        /* THAY ĐỔI: Header trong suốt */
+        background-color: transparent; 
+        border-bottom: none;
+        /* THAY ĐỔI: Header cố định, không ảnh hưởng đến luồng nội dung */
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1000;
     }
 
     .logo-container {
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 0; 
     }
     
-    .slogan {
+    .header-logo {
+        height: 30px; /* Giả định kích thước logo */
+    }
+
+    /* Styles cho các nút điều hướng */
+    #loadQuestionsBtn {
+        background-color: #059669; /* Xanh lá */
+        color: white;
+        border: none;
+    }
+
+    #loadQuestionsBtn:hover { background-color: #047857; }
+
+    .nav-btn {
+        background-color: #3b82f6; /* Xanh dương */
+        color: white;
+        border: none;
+    }
+
+    .nav-btn:hover:not(:disabled) { background-color: #2563eb; }
+    .nav-btn.limit { opacity: 0.7; cursor: not-allowed; } 
+
+    #answerBtn {
+        background-color: #f97316; /* Cam */
+        color: white;
+        border: none;
+        font-weight: 700;
+    }
+    #answerBtn:hover:not(:disabled) { background-color: #ea580c; }
+    
+    #questionContainer {
+        margin-top: 20px;
+        padding: 20px;
+        border: 1px solid #e0e0e0;
+        border-radius: 12px;
+        background-color: #f9fafb;
+    }
+    
+    #statsDisplay { /* Thống kê */
         font-size: 16px;
-        font-weight: 600;
-        color: #3b82f6; 
+        font-weight: 700;
+        padding-bottom: 10px;
+        border-bottom: 1px dashed #ccc;
+        margin-bottom: 20px;
     }
 
-    /* ĐÃ LOẠI BỎ CSS của search-container, auth-buttons và Modal */
-
-    /* ------------------------------------- */
     /* CẬP NHẬT CSS CHO CÂU HỎI (Nổi bật) */
-    /* ------------------------------------- */
     .question-text {
-        font-size: 20px; /* Tăng kích thước */
-        font-weight: 800; /* Rất đậm */
-        color: #1e3a8a; /* Màu xanh nổi bật */
+        font-size: 22px; /* Tăng kích thước */
+        font-weight: 900; /* Rất đậm */
+        color: #007bff; /* Màu xanh nổi bật */
         margin-bottom: 15px;
-    }
-    /* ------------------------------------- */
-
-    #subjectNameDisplay {
-        font-size: 18px;
-        font-weight: 800;
-        color: #1e3a8a;
-        margin-bottom: 15px;
-        padding-bottom: 5px;
-        border-bottom: 2px solid #e0e0e0;
     }
     
     .answer-option {
@@ -128,15 +162,48 @@
         transition: background-color 0.2s;
     }
 
-    /* Các styles cho nút điều hướng, thống kê... (giữ nguyên) */
-    #loadQuestionsBtn { background-color: #059669; color: white; border: none; }
-    #answerBtn { background-color: #f97316; color: white; font-weight: 700; }
-    .nav-btn { background-color: #3b82f6; color: white; border: none; }
-    .nav-btn:hover:not(:disabled) { background-color: #2563eb; }
-    .nav-btn.limit { opacity: 0.7; cursor: not-allowed; } 
-    /* ... (Phần còn lại của CSS giao diện) ... */
+    .answer-option:hover {
+        background-color: #eff6ff;
+    }
+
+    .answer-option input[type="checkbox"] {
+        margin-right: 15px;
+        margin-top: 4px; 
+        transform: scale(1.2);
+    }
+
+    #feedback {
+        margin-top: 20px;
+        padding: 15px;
+        border-radius: 8px;
+        font-weight: 600;
+        display: none; 
+    }
+
+    .feedback-correct {
+        background-color: #ecfdf5; 
+        border: 1px solid #10b981;
+        color: #065f46;
+    }
+
+    .feedback-incorrect {
+        background-color: #fff7ed; 
+        border: 1px solid #f97316;
+        color: #9a3412;
+    }
+
+    .note-text {
+        margin-top: 10px;
+        font-weight: 400;
+        border-top: 1px dashed #ccc;
+        padding-top: 10px;
+    }
     
-    /* (Giữ lại các CSS feedback và loading spinner) */
+    #status {
+        font-style: italic;
+        color: #718096;
+    }
+
     .loading-spinner {
         border: 4px solid #f3f3f3;
         border-top: 4px solid #3b82f6;
@@ -159,8 +226,7 @@
   
   <header class="navbar">
       <div class="logo-container"> 
-          <img src="logo.png" alt="Logo của bạn" class="header-logo">
-          <span class="slogan">Làm việc thông minh hơn</span>
+          <img src="logo.png" alt="Logo" class="header-logo">
       </div>
   </header>
   <div class="card">
@@ -169,20 +235,18 @@
     <div class="controls">
       <label for="subjectSelector" style="margin-top:0; margin-bottom:0;">Chọn Môn Thi:</label>
     </div>
-    
     <div style="margin-top:5px" class="controls">
-      <button id="loadQuestionsBtn">Tải Bộ Đề</button>
       <select id="subjectSelector">
-        <option value="">-- Đang tải Bộ câu hỏi --</option>
+        <option value="">-- Đang tải Mã Môn --</option>
       </select>
+      <button id="loadQuestionsBtn">Tải Bộ Đề</button>
     </div>
     <span id="status" style="margin-top:10px; display:block;"></span>
   </div>
 
   <div class="card" id="questionCard" style="display:none;">
-    <div id="subjectNameDisplay"></div> 
-    
     <div id="statsDisplay"></div> 
+    <div id="subjectNameDisplay"></div> 
     <div id="questionContainer"></div>
 
     <div id="feedback" style="display:none;"></div>
@@ -248,8 +312,7 @@
     const nextBtn = document.getElementById('nextBtn');
     const answerBtn = document.getElementById('answerBtn');
     const statsDisplay = document.getElementById('statsDisplay'); // DOM cho thống kê
-    const subjectNameDisplay = document.getElementById('subjectNameDisplay');
-
+    const subjectNameDisplay = document.getElementById('subjectNameDisplay'); 
 
     // Global State
     let allQuestionsForSubject = []; 
@@ -262,6 +325,7 @@
     // PHẦN 1: TẢI VÀ XỬ LÝ DỮ LIỆU
     // -----------------------------------------------------
     
+    // BỔ SUNG: Danh sách mã môn cố định để tìm tên môn
     const SUBJECT_LIST = [
         { code: 11, name: 'PHÁP LUẬT HẢI QUAN - Pháp luật HQ' },
         { code: 12, name: 'PHÁP LUẬT HẢI QUAN - Chính sách thuế' },
@@ -277,24 +341,43 @@
         { code: 36, name: 'KỸ THUẬT NGHIỆP VỤ HẢI QUAN - Phân loại hàng hóa' },
     ];
     
-
-    function loadSubjects() {
-      //statusEl.textContent = '✅ Đã tải danh sách mã môn cố định.';
-      subjectSelector.innerHTML = '<option value="">-- Chọn Mã Môn --</option>';
-      
-      SUBJECT_LIST.forEach(subject => {
-          const option = document.createElement('option');
-          option.value = subject.code;
-          // Hiển thị cả mã và tên môn
-          option.textContent = `${subject.code} - ${subject.name}`; 
-          subjectSelector.appendChild(option);
-      });
-    }
-
-    // Hàm tìm tên môn học dựa trên mã môn
+    // BỔ SUNG: Hàm tìm tên môn học dựa trên mã môn
     function getSubjectName(code) {
         const subject = SUBJECT_LIST.find(s => String(s.code) === String(code));
         return subject ? subject.name : `Mã môn ${code}`;
+    }
+
+
+    async function loadSubjects() {
+      // Logic tải mã môn được giữ nguyên
+      statusEl.innerHTML = '<span class="loading-spinner"></span> Đang tải danh sách mã môn...';
+      subjectSelector.innerHTML = '<option value="">-- Đang tải... --</option>';
+      try {
+        const colRef = collection(db, COLLECTION_NAME);
+        // Tải tất cả docs để lấy mã môn duy nhất (hoặc bạn có thể tối ưu query nếu có field chứa mã môn duy nhất)
+        const snapshot = await getDocs(colRef); 
+        const allSubjects = new Set();
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          if (data[MA_MON_FIELD_NAME] !== null && data[MA_MON_FIELD_NAME] !== undefined) {
+            allSubjects.add(String(data[MA_MON_FIELD_NAME]).trim()); 
+          }
+        });
+        subjectSelector.innerHTML = '<option value="">-- Chọn Mã Môn --</option>';
+
+        Array.from(allSubjects).sort().forEach(subjectCode => {
+            const subjectName = getSubjectName(subjectCode);
+            const option = document.createElement('option');
+            option.value = subjectCode;
+            option.textContent = `${subjectCode} - ${subjectName}`; // Hiển thị cả mã và tên môn
+            subjectSelector.appendChild(option);
+        });
+        statusEl.textContent = `✅ Đã tải ${allSubjects.size} mã môn.`;
+      } catch (error) {
+        console.error("Lỗi khi tải mã môn:", error);
+        statusEl.textContent = '❌ Lỗi khi tải mã môn: ' + error.message;
+        subjectSelector.innerHTML = '<option value="">-- Lỗi tải dữ liệu --</option>';
+      }
     }
 
 
@@ -354,16 +437,11 @@
 
         statusEl.textContent = `✅ Đã tải ${allQuestionsForSubject.length} câu hỏi. Bắt đầu luyện tập.`;
         questionCard.style.display = 'block';
-        
-        // Hiển thị tên môn học
+
         const subjectName = getSubjectName(selectedSubject);
         subjectNameDisplay.textContent = `📚 Môn: ${subjectName}`;
         
         loadNextQuestion(true); 
-        
-        // Tự động cuộn xuống thẻ câu hỏi
-        questionCard.scrollIntoView({ behavior: 'smooth' });
-
 
       } catch (error) {
         console.error("Lỗi khi tải câu hỏi:", error);
@@ -401,9 +479,8 @@
              
              // Xóa bớt lịch sử cũ nếu đã vượt quá giới hạn (chỉ giữ HISTORY_LIMIT câu sau cùng)
              if (historyStack.length >= HISTORY_LIMIT) {
-                 // Sẽ giữ lại 2 câu cũ (index 1, 2) và xóa câu 0. Vị trí index sẽ lùi lại 1.
                  historyStack = historyStack.slice(historyStack.length - HISTORY_LIMIT + 1);
-                 currentHistoryIndex = historyStack.length - 1; // Index cuối cùng của mảng mới
+                 currentHistoryIndex = historyStack.length - 1; 
              }
              
              nextQuestion = getRandomQuestion();
@@ -416,7 +493,6 @@
     }
 
     function loadPreviousQuestion() {
-        // Chỉ cho phép quay lại nếu không phải câu đầu tiên trong lịch sử hiện tại
         if (currentHistoryIndex > 0) {
             // Lưu lại lựa chọn hiện tại trước khi chuyển
             saveCurrentSelection(); 
@@ -451,7 +527,7 @@
         const incorrect = stats.incorrect;
         
         statsDisplay.innerHTML = `
-            📊 Đã trả lời: ${total} câu | 
+            📊 **Thống kê:** Đã trả lời: ${total} câu | 
             Đúng: <span style="color:#065f46;">${correct}</span> | 
             Sai: <span style="color:#9a3412;">${incorrect}</span>
         `;
@@ -461,7 +537,6 @@
         isAnswered = q.answered || false; // Khôi phục trạng thái đã trả lời
         feedbackEl.style.display = 'none';
         
-        // 1. Loại bỏ chữ "Câu hỏi:" và thông tin trạng thái
         const questionHtml = `
             <div class="question-text">${q.text}</div> 
             
