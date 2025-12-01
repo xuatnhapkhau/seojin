@@ -13,8 +13,8 @@
     /* ------------------------------------- */
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      /* Điều chỉnh margin để header toàn màn hình không bị đè vào */
-      margin: 0; 
+      /* ĐIỀU CHỈNH: Tăng margin-top để chừa chỗ cho fixed header mới */
+      margin: 80px 0 0 0; 
       padding: 0;
       background-color: #f4f6f9;
       color: #333;
@@ -26,7 +26,7 @@
       border-radius: 16px;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
       max-width: 900px;
-      /* Điều chỉnh margin-top để tạo khoảng cách với Header */
+      /* Giữ nguyên: Điều chỉnh margin-top để tạo khoảng cách với Header */
       margin: 24px auto 20px auto; 
       border: 1px solid #e0e0e0;
     }
@@ -70,17 +70,30 @@
     }
     
     /* ------------------------------------- */
-    /* CẬP NHẬT CSS CHO HEADER (Tối giản) */
+    /* CẬP NHẬT CSS CHO HEADER (Fixed & Tối giản) */
     /* ------------------------------------- */
     .navbar {
+        /* Cố định header */
+        position: fixed; 
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000; /* Đảm bảo nó luôn nằm trên cùng */
+        
         display: flex;
+        /* Chỉ căn trái */
         justify-content: flex-start; 
         align-items: center;
-        /* GIẢM PADDING & BỎ BORDER-BOTTOM để nó chỉ như một phần nội dung */
         padding: 10px 30px; 
-        background-color: transparent; /* Đặt nền trong suốt */
-        border-bottom: none; /* Bỏ đường viền dưới */
-        /* **QUAN TRỌNG:** Nếu muốn header không che, đảm bảo không có position: fixed */
+        /* SỬA: Đặt trong suốt */
+        background-color: transparent; 
+        /* SỬA: Loại bỏ border-bottom */
+        border-bottom: none; 
+    }
+
+    .logo-link {
+        display: flex; /* Dùng flex cho thẻ a để logo-container căn giữa */
+        text-decoration: none; /* Bỏ gạch chân */
     }
 
     .logo-container {
@@ -89,18 +102,12 @@
         gap: 10px;
     }
     
-    .slogan {
-        /* ẨN SLOGAN: Chỉ giữ lại logo icon */
-        display: none; 
-    }
-
-    /* Thêm style cho logo nếu cần để nó nhỏ gọn hơn */
     .header-logo {
-        height: 40px; /* Điều chỉnh kích thước logo (tùy chọn) */
+        /* SỬA: Logo to hơn một chút (từ 40px lên 50px) */
+        height: 50px; 
+        width: auto;
     }
-
-    /* ĐÃ LOẠI BỎ CSS của search-container, auth-buttons và Modal */
-
+    
     /* ------------------------------------- */
     /* CẬP NHẬT CSS CHO CÂU HỎI (Nổi bật) */
     /* ------------------------------------- */
@@ -158,15 +165,46 @@
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
     }
+    
+    /* CSS cho Feedback */
+    .feedback-correct {
+        margin-top: 15px;
+        padding: 15px;
+        border-radius: 8px;
+        background-color: #ecfdf5; /* Xanh lá nhạt */
+        color: #065f46; /* Xanh lá đậm */
+        font-weight: 600;
+        border: 1px solid #a7f3d0;
+    }
+
+    .feedback-incorrect {
+        margin-top: 15px;
+        padding: 15px;
+        border-radius: 8px;
+        background-color: #fff7ed; /* Cam/Đỏ nhạt */
+        color: #9a3412; /* Đỏ/Nâu đậm */
+        font-weight: 600;
+        border: 1px solid #fed7aa;
+    }
+
+    .note-text {
+        margin-top: 10px;
+        padding-top: 10px;
+        border-top: 1px dashed #ccc;
+        font-weight: normal;
+        color: #4b5563;
+        font-style: italic;
+    }
   </style>
 </head>
 <body>
   
   <header class="navbar">
-      <div class="logo-container"> 
-          <img src="logo.png" alt="Logo của bạn" class="header-logo">
-          <span class="slogan">Làm việc thông minh hơn</span>
-      </div>
+      <a href="index.html" class="logo-link">
+          <div class="logo-container"> 
+              <img src="logo.png" alt="Logo của bạn" class="header-logo">
+          </div>
+      </a>
   </header>
   <div class="card">
     <h1>📝 Ôn Luyện Trắc Nghiệm</h1>
@@ -267,39 +305,63 @@
     // PHẦN 1: TẢI VÀ XỬ LÝ DỮ LIỆU
     // -----------------------------------------------------
     
+    // CẬP NHẬT SUBJECT_LIST VỚI CẤU TRÚC PHÂN CẤP
     const SUBJECT_LIST = [
-        { code: 11, name: 'PHÁP LUẬT HẢI QUAN - Pháp luật HQ' },
-        { code: 12, name: 'PHÁP LUẬT HẢI QUAN - Chính sách thuế' },
-        { code: 13, name: 'PHÁP LUẬT HẢI QUAN - Vi phạm hành chính' },
-        { code: 21, name: 'KỸ THUẬT NGHIỆP VỤ NGOẠI THƯƠNG - Giao nhận vận tải' },
-        { code: 22, name: 'KỸ THUẬT NGHIỆP VỤ NGOẠI THƯƠNG - Ngoại thương' },
-        { code: 23, name: 'KỸ THUẬT NGHIỆP VỤ NGOẠI THƯƠNG - Thanh toán quốc tế' },
-        { code: 31, name: 'KỸ THUẬT NGHIỆP VỤ HẢI QUAN - Thủ tục hải quan' },
-        { code: 32, name: 'KỸ THUẬT NGHIỆP VỤ HẢI QUAN - Chính sách mặt hàng' },
-        { code: 33, name: 'KỸ THUẬT NGHIỆP VỤ HẢI QUAN - Trị giá hải quan' },
-        { code: 34, name: 'KỸ THUẬT NGHIỆP VỤ HẢI QUAN - Xuất xứ hàng hóa' },
-        { code: 35, name: 'KỸ THUẬT NGHIỆP VỤ HẢI QUAN - Sỡ hữu trí tuệ' },
-        { code: 36, name: 'KỸ THUẬT NGHIỆP VỤ HẢI QUAN - Phân loại hàng hóa' },
+        { group: 'Pháp luật hải quan', children: [
+            { code: 11, name: 'Pháp luật hải quan' },
+            { code: 12, name: 'Chính sách thuế' },
+            { code: 13, name: 'Vi phạm hành chính' }
+        ]},
+        { group: 'Kỹ thuật nghiệp vụ ngoại thương', children: [
+            { code: 21, name: 'Giao nhận vận tải' },
+            { code: 22, name: 'Ngoại thương' },
+            { code: 23, name: 'Thanh toán quốc tế' }
+        ]},
+        { group: 'Kỹ thuật nghiệp vụ hải quan', children: [
+            { code: 31, name: 'Thủ tục hải quan' },
+            { code: 32, name: 'Chính sách mặt hàng' },
+            { code: 33, name: 'Trị giá hải quan' },
+            { code: 34, name: 'Xuất xứ hàng hóa' },
+            { code: 35, name: 'Sỡ hữu trí tuệ' },
+            { code: 36, name: 'Phân loại hàng hóa' }
+        ]}
     ];
     
 
     function loadSubjects() {
       //statusEl.textContent = '✅ Đã tải danh sách mã môn cố định.';
-      subjectSelector.innerHTML = '<option value="">-- Chọn Mã Môn --</option>';
+      subjectSelector.innerHTML = '<option value="">-- Chọn Môn Thi --</option>';
       
-      SUBJECT_LIST.forEach(subject => {
-          const option = document.createElement('option');
-          option.value = subject.code;
-          // Hiển thị cả mã và tên môn
-          option.textContent = `${subject.code} - ${subject.name}`; 
-          subjectSelector.appendChild(option);
+      SUBJECT_LIST.forEach(groupItem => {
+          // Tạo optgroup cho nhóm (Không cho phép chọn)
+          const optgroup = document.createElement('optgroup');
+          optgroup.label = groupItem.group;
+          
+          groupItem.children.forEach(subject => {
+              const option = document.createElement('option');
+              option.value = subject.code;
+              // Chỉ hiển thị tên môn (vì đã có nhóm)
+              option.textContent = subject.name; 
+              optgroup.appendChild(option);
+          });
+          
+          subjectSelector.appendChild(optgroup);
       });
     }
 
-    // Hàm tìm tên môn học dựa trên mã môn
+    // Hàm tìm tên môn học dựa trên mã môn (chỉ trả về tên)
     function getSubjectName(code) {
-        const subject = SUBJECT_LIST.find(s => String(s.code) === String(code));
-        return subject ? subject.name : `Mã môn ${code}`;
+        let subjectName = `Mã môn ${code}`;
+        
+        SUBJECT_LIST.forEach(groupItem => {
+            const subject = groupItem.children.find(s => String(s.code) === String(code));
+            if (subject) {
+                // Trả về tên môn học
+                subjectName = subject.name; 
+            }
+        });
+        
+        return subjectName;
     }
 
 
@@ -577,4 +639,3 @@
   </script>
 </body>
 </html>
-
