@@ -74,12 +74,13 @@
     /* ------------------------------------- */
     .navbar {
         display: flex;
-        /* Chỉ căn trái */
         justify-content: flex-start; 
         align-items: center;
-        padding: 15px 30px;
-        background-color: #ffffff;
-        border-bottom: 1px solid #e0e0e0;
+        /* GIẢM PADDING & BỎ BORDER-BOTTOM để nó chỉ như một phần nội dung */
+        padding: 10px 30px; 
+        background-color: transparent; /* Đặt nền trong suốt */
+        border-bottom: none; /* Bỏ đường viền dưới */
+        /* **QUAN TRỌNG:** Nếu muốn header không che, đảm bảo không có position: fixed */
     }
 
     .logo-container {
@@ -89,9 +90,13 @@
     }
     
     .slogan {
-        font-size: 16px;
-        font-weight: 600;
-        color: #3b82f6; 
+        /* ẨN SLOGAN: Chỉ giữ lại logo icon */
+        display: none; 
+    }
+
+    /* Thêm style cho logo nếu cần để nó nhỏ gọn hơn */
+    .header-logo {
+        height: 40px; /* Điều chỉnh kích thước logo (tùy chọn) */
     }
 
     /* ĐÃ LOẠI BỎ CSS của search-container, auth-buttons và Modal */
@@ -572,3 +577,4 @@
   </script>
 </body>
 </html>
+
